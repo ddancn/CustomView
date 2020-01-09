@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TagTextView">
+        <!--边框颜色，默认与文字颜色相同-->
+        <attr name="borderColor" format="color" />
+        <!--背景颜色，默认与文字颜色相同，只有fillMode为color时生效-->
+        <attr name="backgroundColor" format="color" />
+        <!--填充模式-->
+        <attr name="fillMode" format="enum">
+            <!--不填充，即透明-->
+            <enum name="none" value="0" />
+            <!--用border的颜色填充-->
+            <enum name="fill" value="1" />
+            <!--指定颜色填充，为backgroundColor-->
+            <enum name="color" value="2" />
+        </attr>
+        <!--边框宽度，默认为3-->
+        <attr name="borderWidth" format="dimension" />
+        <!--边框圆角，默认为5-->
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+</resources>
