@@ -5,7 +5,7 @@
  * 默认边框颜色为文字颜色，背景颜色为边框颜色，模式为边框，自带左右padding
 
 ## 实现效果
-![demo](demo.jpg)
+![demo](https://github.com/ddancn/CustomView/blob/master/view/readme/tag_tv/demo.jpg)
 
 ## 使用方式
 ```xml
@@ -36,4 +36,4 @@
 ## 致命弱点
 **由于用到了drawRoundRect，所以TargetAPI >= 21。** 哈哈哈哈，我还是回去用drawable吧。。
 
-![呆住](meme.png)
+![呆住](https://github.com/ddancn/CustomView/blob/master/view/readme/tag_tv/meme.png)
