@@ -7,15 +7,15 @@ import android.graphics.Paint
 import android.os.Build
 import android.util.AttributeSet
 import android.widget.TextView
-import androidx.annotation.IntRange
 import com.ddancn.view.R
+import kotlin.math.max
 
 /**
  * @author ddan.zhuang
  * @date 2020/1/9
  * 样式为常见tag的TextView，基础样式为圆角边框
- * 支持设置边框颜色和宽度、圆角大小、背景颜色、填充模式（无、边框颜色、指定颜色）
- * 默认边框颜色为文字颜色，背景颜色为边框颜色，无填充，自带左右padding
+ * 支持设置边框颜色和宽度、圆角大小、背景颜色、填充模式（边框，背景，全部）
+ * 默认边框颜色为文字颜色，背景颜色为边框颜色，模式为边框，自带左右padding
  */
 class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, attrs) {
 
@@ -39,15 +39,31 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
         // 圆角大小
         radius = array.getDimension(R.styleable.TagTextView_radius, 8f)
         // 设置边距，防止线画到字上
-        setPadding(10, 0, 10, 0)
+        setPadding(max(paddingLeft, 10), 0, max(paddingRight, 10), 0)
         array.recycle()
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDraw(canvas: Canvas?) {
+        when (fillMode) {
+            FillMode.BORDER -> drawBorder(canvas)
+            FillMode.FILL -> fillBackground(canvas)
+            FillMode.ALL -> {
+                // 先画背景再画边框，防止边框被背景遮挡
+                fillBackground(canvas)
+                drawBorder(canvas)
+            }
+        }
+        // 最后再写上文字
+        super.onDraw(canvas)
+    }
+
+    /**
+     * 画边框
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun drawBorder(canvas: Canvas?) {
         // 防止有半条线在view外面的情况
         val halfBorderWidth = borderWidth / 2
-        // 画边框
         paint.color = borderColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = borderWidth
@@ -56,11 +72,17 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
             halfBorderWidth,
             width - halfBorderWidth,
             height - halfBorderWidth,
-            radius, radius,
-            paint
+            radius, radius, paint
         )
-        // 如果需要，填充背景颜色
-        if (fillMode != FillMode.NONE) {
+    }
+
+    /**
+     * 画背景
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun fillBackground(canvas: Canvas?) {
+        if (currentTextColor != backgroundColor) {
+            val halfBorderWidth = borderWidth / 2
             paint.color = backgroundColor
             paint.style = Paint.Style.FILL
             canvas?.drawRoundRect(
@@ -71,24 +93,22 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
                 radius, radius, paint
             )
         }
-        // 最后再写上文字
-        super.onDraw(canvas)
     }
 
     enum class FillMode(val value: Int) {
-        // 不填充，即透明
-        NONE(0),
-        // 用边框颜色填充
+        // 只有边框，默认
+        BORDER(0),
+        // 只有背景
         FILL(1),
-        // 用指定颜色填充
-        COLOR(2);
+        // 边框和背景都有
+        ALL(2);
 
         companion object {
-            fun getMode(@IntRange(from = 0, to = 2) value: Int): FillMode = when (value) {
-                0 -> NONE
+            fun getMode(value: Int): FillMode = when (value) {
+                0 -> BORDER
                 1 -> FILL
-                2 -> COLOR
-                else -> NONE
+                2 -> ALL
+                else -> BORDER
             }
         }
     }

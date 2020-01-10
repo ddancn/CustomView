@@ -7,13 +7,40 @@
     tools:context=".MainActivity">
 
     <com.ddancn.view.tag.TagTextView
+        android:id="@+id/tag1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/tag_tv_1"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.ddancn.view.tag.TagTextView
+        android:id="@+id/tag2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/tag_tv_2"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        app:backgroundColor="@color/colorPrimary"
+        app:fillMode="fill"
+        app:layout_constraintLeft_toRightOf="@id/tag1"
+        app:layout_constraintTop_toTopOf="@id/tag1" />
+
+    <com.ddancn.view.tag.TagTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/tag_tv_3"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        app:backgroundColor="@color/colorPrimary"
+        app:borderColor="@color/colorPrimaryDark"
+        app:fillMode="all"
+        app:layout_constraintLeft_toRightOf="@id/tag2"
+        app:layout_constraintTop_toTopOf="@id/tag2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
