@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.os.Build
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.annotation.IntRange
 import com.ddancn.view.R
 import kotlin.math.max
 
@@ -37,7 +38,7 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
         // 边框宽度
         borderWidth = array.getDimension(R.styleable.TagTextView_borderWidth, 3f)
         // 圆角大小
-        radius = array.getDimension(R.styleable.TagTextView_radius, 8f)
+        radius = array.getDimension(R.styleable.TagTextView_borderRadius, 8f)
         // 设置边距，防止线画到字上
         setPadding(max(paddingLeft, 10), 0, max(paddingRight, 10), 0)
         array.recycle()
@@ -62,7 +63,7 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun drawBorder(canvas: Canvas?) {
-        // 防止有半条线在view外面的情况
+        // 防止有半条边框在view外面的情况
         val halfBorderWidth = borderWidth / 2
         paint.color = borderColor
         paint.style = Paint.Style.STROKE
@@ -82,6 +83,7 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun fillBackground(canvas: Canvas?) {
         if (currentTextColor != backgroundColor) {
+            // 防止有半条边框在view外面的情况
             val halfBorderWidth = borderWidth / 2
             paint.color = backgroundColor
             paint.style = Paint.Style.FILL
@@ -104,7 +106,7 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
         ALL(2);
 
         companion object {
-            fun getMode(value: Int): FillMode = when (value) {
+            fun getMode(@IntRange(from = 0, to = 2) value: Int): FillMode = when (value) {
                 0 -> BORDER
                 1 -> FILL
                 2 -> ALL

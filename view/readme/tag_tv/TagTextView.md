@@ -28,12 +28,18 @@
     * fill：填充背景，不设置`backgroundColor`时默认用边框颜色
     * all：边框+背景
 * borderWidth：边框宽度，默认为3px
-* radius：边框圆角，默认为8px
+* borderRadius：边框圆角，默认为8px
 
 >注：如果设置了`fillMode`为`fill`或`all`，却没指定与文字颜色不同的边框/背景颜色，则fill不生效。
 这是为了防止出现`文字颜色==边框颜色==背景颜色`，也就是全部糊成一坨的尴尬场面。
 
+## 如何实现
+* 在TextView中onDraw的super调用之前，画上边框和（或）背景
+* 注意边框和背景的绘制顺序，不要让背景盖住边框
+* 还有如果画边框的时候起点是0，终点是宽高值，则边缘其实有一半宽的线被画到view外面了。所以让四个坐标分别加/减上`halfBorderWidth`
+
 ## 致命弱点
-**由于用到了drawRoundRect，所以TargetAPI >= 21。** 哈哈哈哈，我还是回去用drawable吧。。
+**由于用到了drawRoundRect，所以TargetAPI >= 21。** ~~哈哈哈哈，我还是回去用drawable吧。。~~
+打算自己实现一个
 
 ![呆住](https://github.com/ddancn/CustomView/blob/master/view/readme/tag_tv/meme.png)
