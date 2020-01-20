@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleColor">
+        <attr name="color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleColorGroup">
+        <!--半径，默认25px-->
+        <attr name="radius" format="dimension" />
+        <!--列数，默认5-->
+        <attr name="column" format="integer" />
+        <!--上下左右margin，当item在边缘行/列时无效-->
+        <attr name="itemMargin" format="dimension" />
+        <attr name="itemMarginHorizontal" format="dimension" />
+        <attr name="itemMarginVertical" format="dimension" />
+    </declare-styleable>
+
+</resources>
