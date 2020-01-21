@@ -5,7 +5,8 @@
 * 对于浅颜色，会把边框颜色变成灰色，同时给圆一个灰色的描边，防止看不清楚
 
 ## 实现效果
-待传
+![bounce](https://github.com/ddancn/CustomView/blob/master/view/readme/color_group/bounce.gif)
+![shrink](https://github.com/ddancn/CustomView/blob/master/view/readme/color_group/shrink.gif)
 
 ## 使用方式
 ```xml
