@@ -10,7 +10,6 @@ import androidx.annotation.ColorInt
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import com.ddancn.view.R
 
 /**
  * @author ddan.zhuang
@@ -19,22 +18,19 @@ import com.ddancn.view.R
  */
 class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val strokePaint: Paint
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     var radius = 0f
+    var strokeWidth = 0f
+    var strokeGap = 0f
+    var anim = AnimParam()
 
     private var isChosen = false
     private var isLight: Boolean
 
     init {
-        // 从xml中获取属性
-        val array = context.obtainStyledAttributes(attrs, R.styleable.CircleColor)
-        paint.color = array.getColor(R.styleable.CircleColor_color, 0xff0000)
-        array.recycle()
         // 设置选中时边框的paint
-        strokePaint = Paint(paint)
         strokePaint.style = Paint.Style.STROKE
-        strokePaint.strokeWidth = 3f
         // 如果是浅色，把边框设成灰色
         isLight = isLight(paint.color)
         if (isLight) {
@@ -44,7 +40,8 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // 设置宽高为比radius更大，给画被选中时的边框留出位置
-        setMeasuredDimension(radius.toInt() * 2 + 20, radius.toInt() * 2 + 20)
+        val length = ((radius + strokeGap + strokeWidth) * 2).toInt() + 10
+        setMeasuredDimension(length, length)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -54,11 +51,18 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
         canvas?.drawCircle(width / 2, height / 2, radius, paint)
         // 如果是浅色，给一个灰色的描边，不然看不清楚
         if (isLight) {
+            strokePaint.strokeWidth = 3f
             canvas?.drawCircle(width / 2, height / 2, radius - 1, strokePaint)
         }
-        // 如果被选中，画边框，不然看不清楚
+        // 如果被选中，画边框
         if (isChosen) {
-            canvas?.drawCircle(width / 2, height / 2, radius + 2 + 6, strokePaint)
+            strokePaint.strokeWidth = strokeWidth
+            canvas?.drawCircle(
+                width / 2,
+                height / 2,
+                radius + strokeGap + strokeWidth / 2,
+                strokePaint
+            )
         }
     }
 
@@ -82,6 +86,11 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
     fun setChosen(chosen: Boolean) {
         isChosen = chosen
         invalidate()
+        // 选中项缩小动画
+        if (chosen && anim.animType == AnimParam.AnimType.BOUNCE) {
+            animate().scaleX(anim.animScale).scaleY(ANIM_SCALE).duration = anim.animDuration / 2
+            postDelayed({ animate().scaleX(1f).scaleY(1f).duration = anim.animDuration / 2 }, anim.animDuration / 2)
+        }
     }
 
     /**
@@ -90,4 +99,6 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
     private fun isLight(@ColorInt color: Int): Boolean {
         return color.red * 0.299 + color.green * 0.587 + color.blue * 0.114 >= 192
     }
+
+
 }

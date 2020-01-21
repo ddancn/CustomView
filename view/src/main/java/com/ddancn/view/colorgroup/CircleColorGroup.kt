@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.children
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddancn.view.R
@@ -22,8 +21,6 @@ val DEFAULT_COLORS = listOf(
     Color.DKGRAY,
     Color.BLACK
 )
-const val ANIM_DURATION = 200L
-const val ANIM_SCALE = 0.9f
 
 class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
@@ -34,8 +31,13 @@ class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
 
     private val column: Int
     private val radius: Float
+    private val strokeWidth: Float
+    private val strokeGap: Float
+    private val anim = AnimParam()
     private val itemMarginHorizontal: Float
     private val itemMarginVertical: Float
+
+    private var prePosition = 0
 
     init {
         val array = context.obtainStyledAttributes(attrs, R.styleable.CircleColorGroup)
@@ -43,12 +45,22 @@ class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
         column = array.getColor(R.styleable.CircleColorGroup_column, 5)
         // 半径，默认25px
         radius = array.getDimension(R.styleable.CircleColorGroup_radius, 25f)
+        // 边框宽度，默认3px
+        strokeWidth = array.getDimension(R.styleable.CircleColorGroup_strokeWidth, 3f)
+        // 与边框之间的距离，默认等于边框宽度
+        strokeGap = array.getDimension(R.styleable.CircleColorGroup_strokeGap, strokeWidth)
         // 上下左右margin，当item在边缘行/列时无效
         val margin = array.getDimension(R.styleable.CircleColorGroup_itemMargin, 5f)
         itemMarginHorizontal =
             array.getDimension(R.styleable.CircleColorGroup_itemMarginHorizontal, margin)
         itemMarginVertical =
             array.getDimension(R.styleable.CircleColorGroup_itemMarginVertical, margin)
+        // 动画参数
+        anim.animDuration =
+            array.getInt(R.styleable.CircleColorGroup_animDuration, ANIM_DURATION.toInt()).toLong()
+        anim.animScale = array.getFloat(R.styleable.CircleColorGroup_animScale, ANIM_SCALE)
+        anim.animType =
+            AnimParam.AnimType.getMode(array.getInt(R.styleable.CircleColorGroup_animType, 0))
         array.recycle()
 
         // 列表和适配器
@@ -72,17 +84,29 @@ class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
 
     /**
      * 设置选中项
+     * @param position 被选中的项
      */
     fun setChosen(position: Int) {
         if (position in 0..colorList.lastIndex) {
-            recyclerView.children.forEachIndexed { index, view ->
-                val cur = index == position
-                (view as CircleColor).setChosen(cur)
-                // 动画
-                view.animate().scaleX(if (cur) ANIM_SCALE else 1f)
-                    .scaleY(if (cur) ANIM_SCALE else 1f).duration = ANIM_DURATION
+            setChosen(prePosition, false)
+            setChosen(position, true)
+            prePosition = position
 
-            }
+        }
+    }
+
+    /**
+     * 改变某项状态
+     * @param position 要改变的项
+     * @param chosen 改为选中/非选中状态
+     */
+    fun setChosen(position: Int, chosen: Boolean) {
+        val item = recyclerView.getChildAt(position) as CircleColor
+        item.setChosen(chosen)
+        // 缩放动画
+        if (anim.animType == AnimParam.AnimType.SHRINK) {
+            val scale = if (chosen) anim.animScale else 1f
+            item.animate().scaleX(scale).scaleY(scale).duration = anim.animDuration
         }
     }
 
@@ -117,6 +141,9 @@ class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
             holder.itemView as CircleColor
             holder.itemView.setColor(color)
             holder.itemView.radius = radius
+            holder.itemView.strokeWidth = strokeWidth
+            holder.itemView.strokeGap = strokeGap
+            holder.itemView.anim = anim
             holder.itemView.setChosen(position == 0)
             holder.itemView.setOnClickListener {
                 onChosenListener?.invoke(color, position)

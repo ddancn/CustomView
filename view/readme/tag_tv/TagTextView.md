@@ -21,14 +21,14 @@
 * 边框+背景不同色：设置`textColor + backgroundColor + borderColor`
 
 ### 更多属性
-* borderColor：边框颜色，默认与文字颜色相同
-* backgroundColor：背景颜色，默认与`borderColor`相同，只有`fillMode`为`fill`或`all`时生效
-* fillMode：填充模式，枚举值
-    * border：只画边框，不填充背景
-    * fill：填充背景，不设置`backgroundColor`时默认用边框颜色
-    * all：边框+背景
-* borderWidth：边框宽度，默认为3px
-* borderRadius：边框圆角，默认为8px
+* `borderColor`：边框颜色，默认与文字颜色相同
+* `backgroundColor`：背景颜色，默认与`borderColor`相同，只有`fillMode`为`fill`或`all`时生效
+* `fillMode`：填充模式，枚举值
+    * `border`：只画边框，不填充背景
+    * `fill`：填充背景，不设置`backgroundColor`时默认用边框颜色
+    * `all`：边框+背景
+* `borderWidth`：边框宽度，默认为3px
+* `borderRadius`：边框圆角，默认为8px
 
 >注：如果设置了`fillMode`为`fill`或`all`，却没指定与文字颜色不同的边框/背景颜色，则fill不生效。
 这是为了防止出现`文字颜色==边框颜色==背景颜色`，也就是全部糊成一坨的尴尬场面。

@@ -34,7 +34,7 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
         // 背景颜色，默认为边框颜色
         backgroundColor = array.getColor(R.styleable.TagTextView_backgroundColor, borderColor)
         // 填充模式
-        fillMode = FillMode.getMode(array.getColor(R.styleable.TagTextView_fillMode, 0))
+        fillMode = FillMode.getMode(array.getInt(R.styleable.TagTextView_fillMode, 0))
         // 边框宽度
         borderWidth = array.getDimension(R.styleable.TagTextView_borderWidth, 3f)
         // 圆角大小

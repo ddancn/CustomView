@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CircleColor">
-        <attr name="color" format="color" />
-    </declare-styleable>
 
     <declare-styleable name="CircleColorGroup">
         <!--半径，默认25px-->
         <attr name="radius" format="dimension" />
+        <!--边框宽度，默认3px-->
+        <attr name="strokeWidth" format="dimension" />
+        <!--与边框之间的距离，默认等于边框宽度-->
+        <attr name="strokeGap" format="dimension" />
         <!--列数，默认5-->
         <attr name="column" format="integer" />
         <!--上下左右margin，当item在边缘行/列时无效-->
         <attr name="itemMargin" format="dimension" />
         <attr name="itemMarginHorizontal" format="dimension" />
         <attr name="itemMarginVertical" format="dimension" />
+        <!--动画类型-->
+        <attr name="animType" format="enum">
+            <!--无动画，默认-->
+            <enum name="none" value="0"/>
+            <!--选中项变小-->
+            <enum name="shrink" value="1"/>
+            <!--选中项变小再变大-->
+            <enum name="bounce" value="2"/>
+        </attr>
+        <!--动画时长，动画类型不为none时生效-->
+        <attr name="animDuration" value="integer"/>
+        <!--动画缩放比例，动画类型不为NULL时生效-->
+        <attr name="animScale" value="float"/>
     </declare-styleable>
 
 </resources>
