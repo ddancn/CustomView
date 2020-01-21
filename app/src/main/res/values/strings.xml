@@ -3,4 +3,6 @@
     <string name="tag_tv_1">透明边框</string>
     <string name="tag_tv_2">填充背景</string>
     <string name="tag_tv_3">边框背景</string>
+    <string name="color_group_bounce">←bounce</string>
+    <string name="color_group_shrink">←shrink</string>
 </resources>

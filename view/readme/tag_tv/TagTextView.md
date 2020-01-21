@@ -40,6 +40,8 @@
 
 ## 致命弱点
 **由于用到了drawRoundRect，所以TargetAPI >= 21。** ~~哈哈哈哈，我还是回去用drawable吧。。~~
-打算自己实现一个
+~~打算自己实现一个~~
+
+drawRoundRect是native实现的，所以没法照抄。本来以为用drawArc或者drawOval什么的计算一下就可以了，没想到它俩也是target21的，哈哈哈，我还是回去用drawable吧
 
 ![呆住](https://github.com/ddancn/CustomView/blob/master/view/readme/tag_tv/meme.png)

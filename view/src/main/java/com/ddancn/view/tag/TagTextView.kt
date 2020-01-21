@@ -4,6 +4,8 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.os.Build
 import android.util.AttributeSet
 import android.widget.TextView
@@ -26,6 +28,8 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
     private val fillMode: FillMode
     private val borderWidth: Float
     private val radius: Float
+    private val rectF = RectF()
+    private val path = Path()
 
     init {
         val array = context.obtainStyledAttributes(attrs, R.styleable.TagTextView)
@@ -45,13 +49,21 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
     }
 
     override fun onDraw(canvas: Canvas?) {
+        // 防止有半条边框在view外面的情况
+        val halfBorderWidth = borderWidth / 2
+        rectF.set(
+            halfBorderWidth,
+            halfBorderWidth,
+            width - halfBorderWidth,
+            height - halfBorderWidth
+        )
         when (fillMode) {
-            FillMode.BORDER -> drawBorder(canvas)
-            FillMode.FILL -> fillBackground(canvas)
+            FillMode.BORDER -> drawBorder(canvas, rectF)
+            FillMode.FILL -> fillBackground(canvas, rectF)
             FillMode.ALL -> {
                 // 先画背景再画边框，防止边框被背景遮挡
-                fillBackground(canvas)
-                drawBorder(canvas)
+                fillBackground(canvas, rectF)
+                drawBorder(canvas, rectF)
             }
         }
         // 最后再写上文字
@@ -62,38 +74,22 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
      * 画边框
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun drawBorder(canvas: Canvas?) {
-        // 防止有半条边框在view外面的情况
-        val halfBorderWidth = borderWidth / 2
+    private fun drawBorder(canvas: Canvas?, rectF: RectF) {
         paint.color = borderColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = borderWidth
-        canvas?.drawRoundRect(
-            halfBorderWidth,
-            halfBorderWidth,
-            width - halfBorderWidth,
-            height - halfBorderWidth,
-            radius, radius, paint
-        )
+        canvas?.drawRoundRect(rectF, radius, radius, paint)
     }
 
     /**
      * 画背景
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun fillBackground(canvas: Canvas?) {
+    private fun fillBackground(canvas: Canvas?, rectF: RectF) {
         if (currentTextColor != backgroundColor) {
-            // 防止有半条边框在view外面的情况
-            val halfBorderWidth = borderWidth / 2
             paint.color = backgroundColor
             paint.style = Paint.Style.FILL
-            canvas?.drawRoundRect(
-                halfBorderWidth,
-                halfBorderWidth,
-                width - halfBorderWidth,
-                height - halfBorderWidth,
-                radius, radius, paint
-            )
+            canvas?.drawRoundRect(rectF, radius, radius, paint)
         }
     }
 
