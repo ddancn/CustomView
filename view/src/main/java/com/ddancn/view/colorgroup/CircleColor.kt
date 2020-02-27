@@ -31,7 +31,7 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
     init {
         // 设置选中时边框的paint
         strokePaint.style = Paint.Style.STROKE
-        // 如果是浅色，把边框设成灰色
+        // 如果圆是浅色，把边框设成灰色
         isLight = isLight(paint.color)
         if (isLight) {
             strokePaint.color = Color.LTGRAY
@@ -71,12 +71,9 @@ class CircleColor(context: Context, attrs: AttributeSet? = null) : View(context,
      */
     fun setColor(@ColorInt c: Int) {
         paint.color = c
-        strokePaint.color = c
-        // 如果是浅色，边框设成灰色
-        isLight = isLight(paint.color)
-        if (isLight) {
-            strokePaint.color = Color.LTGRAY
-        }
+        // 如果圆是浅色，把边框设成灰色
+        isLight = isLight(c)
+        strokePaint.color = if (isLight) Color.LTGRAY else c
         invalidate()
     }
 

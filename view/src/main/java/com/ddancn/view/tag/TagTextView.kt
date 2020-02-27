@@ -4,7 +4,6 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
 import android.util.AttributeSet
@@ -29,20 +28,19 @@ class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, at
     private val borderWidth: Float
     private val radius: Float
     private val rectF = RectF()
-    private val path = Path()
 
     init {
         val array = context.obtainStyledAttributes(attrs, R.styleable.TagTextView)
         // 边框颜色，默认为文字颜色
-        borderColor = array.getColor(R.styleable.TagTextView_borderColor, currentTextColor)
+        borderColor = array.getColor(R.styleable.TagTextView_ttv_borderColor, currentTextColor)
         // 背景颜色，默认为边框颜色
-        backgroundColor = array.getColor(R.styleable.TagTextView_backgroundColor, borderColor)
+        backgroundColor = array.getColor(R.styleable.TagTextView_ttv_backgroundColor, borderColor)
         // 填充模式
-        fillMode = FillMode.getMode(array.getInt(R.styleable.TagTextView_fillMode, 0))
+        fillMode = FillMode.getMode(array.getInt(R.styleable.TagTextView_ttv_fillMode, 0))
         // 边框宽度
-        borderWidth = array.getDimension(R.styleable.TagTextView_borderWidth, 3f)
+        borderWidth = array.getDimension(R.styleable.TagTextView_ttv_borderWidth, 3f)
         // 圆角大小
-        radius = array.getDimension(R.styleable.TagTextView_borderRadius, 8f)
+        radius = array.getDimension(R.styleable.TagTextView_ttv_borderRadius, 8f)
         // 设置边距，防止线画到字上
         setPadding(max(paddingLeft, 10), 0, max(paddingRight, 10), 0)
         array.recycle()
