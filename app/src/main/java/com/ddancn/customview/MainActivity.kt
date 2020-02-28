@@ -1,9 +1,11 @@
 package com.ddancn.customview
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColor
+import com.ddancn.customview.timeline.TimelineActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -17,5 +19,10 @@ class MainActivity : AppCompatActivity() {
         }
         color_group_bounce.setChosenListener(colorChoseListener)
         color_group_shrink.setChosenListener(colorChoseListener)
+
+        btn_to_timeline.setOnClickListener {
+            val intent = Intent(this, TimelineActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
