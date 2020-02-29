@@ -23,11 +23,12 @@ abstract class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
         val count = parent.childCount
         for (i in 0 until count) {
             val item = parent.getChildAt(i)
+            val xPosition = getLineX(item)
             val adapterPosition = parent.getChildAdapterPosition(item)
             drawable = parent.resources.getDrawable(getDrawable(data[adapterPosition], parent))
             c.drawBitmap(
                 drawableToBitmap(drawable),
-                getLineX(item) - getNodeWidth() / 2,
+                xPosition-getNodeWidth()/2,
                 (item.top + offset).toFloat(),
                 Paint()
             )

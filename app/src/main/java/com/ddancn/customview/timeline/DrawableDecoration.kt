@@ -19,15 +19,14 @@ class DrawableDecoration : DrawableTimelineDecoration<Record>() {
     }
 
     override fun getColor(item: Record, parent: RecyclerView): Int {
-        return Color.GRAY
+        return when (item.status) {
+            1 -> Color.parseColor("#2A9115")
+            else -> Color.GRAY
+        }
     }
 
-    override fun getNodeWidth(): Int {
-        return 30
-    }
+    override fun getNodeWidth(): Int = 30
 
-    override fun getNodeHeight(): Int {
-        return 30
-    }
+    override fun getNodeHeight(): Int = 30
 
 }

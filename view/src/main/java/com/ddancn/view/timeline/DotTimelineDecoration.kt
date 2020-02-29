@@ -31,9 +31,9 @@ abstract class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
 
     override fun drawNode(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val count = parent.childCount
-        val xPosition = getLineX(parent)
         for (i in 0 until count) {
             val item = parent.getChildAt(i)
+            val xPosition = getLineX(item)
             val adapterPosition = parent.getChildAdapterPosition(item)
             paint.color = getColor(data[adapterPosition], parent)
             // 画圆

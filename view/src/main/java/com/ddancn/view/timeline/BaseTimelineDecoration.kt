@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     var offset = 15
     var itemMargin = 15
@@ -29,9 +28,9 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
         val count = parent.childCount
-        val xPosition = getLineX(parent)
         for (i in 0 until count) {
             val item = parent.getChildAt(i)
+            val xPosition = getLineX(item)
             val adapterPosition = parent.getChildAdapterPosition(item)
             // 如果是第一个item，不画顶部的竖线
             if (adapterPosition != 0) {
@@ -69,7 +68,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         // 设置整个decor的宽度
-        val width = paddingLeft + getNodeWidth() * 2 + paddingRight
+        val width = paddingLeft + getNodeWidth() + paddingRight
         if (direction == Direction.LEFT) {
             outRect.left = width
         } else {
@@ -87,7 +86,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
         if (direction == Direction.LEFT) {
             (getNodeWidth() / 2 + paddingLeft).toFloat()
         } else {
-            view.right.toFloat() - paddingRight - getNodeWidth() / 2
+            view.right.toFloat() + paddingLeft+getNodeWidth() / 2
         }
 
     /**
