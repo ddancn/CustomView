@@ -56,7 +56,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
                     paint
                 )
             }
-            drawNode(c, parent, state)
+            drawNode(c, parent, state, xPosition, item, adapterPosition)
         }
     }
 
@@ -82,11 +82,11 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
         }
     }
 
-    protected fun getLineX(view: View): Float =
+    private fun getLineX(view: View): Float =
         if (direction == Direction.LEFT) {
             (getNodeWidth() / 2 + paddingLeft).toFloat()
         } else {
-            view.right.toFloat() + paddingLeft+getNodeWidth() / 2
+            view.right.toFloat() + paddingLeft + getNodeWidth() / 2
         }
 
     /**
@@ -102,7 +102,14 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
     /**
      * 子类负责绘制结点
      */
-    protected abstract fun drawNode(c: Canvas, parent: RecyclerView, state: RecyclerView.State)
+    protected abstract fun drawNode(
+        c: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+        xPosition: Float,
+        item: View,
+        adapterPosition: Int
+    )
 
     /**
      * 结点宽度

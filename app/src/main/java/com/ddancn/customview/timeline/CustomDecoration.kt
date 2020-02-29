@@ -2,6 +2,7 @@ package com.ddancn.customview.timeline
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ddancn.customview.R
 import com.ddancn.view.timeline.BaseTimelineDecoration
@@ -24,30 +25,31 @@ class CustomDecoration : BaseTimelineDecoration<Record>() {
         return color
     }
 
-    override fun drawNode(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val count = parent.childCount
-        for (i in 0 until count) {
-            val item = parent.getChildAt(i)
-            val xPosition = getLineX(item)
-            val adapterPosition = parent.getChildAdapterPosition(item)
-            paint.color = getColor(data[adapterPosition], parent)
-            // 画圆
-            if (adapterPosition == 0) {
-                val drawable = parent.resources.getDrawable(R.drawable.ic_uncheck)
-                c.drawBitmap(
-                    drawableToBitmap(drawable),
-                    xPosition - getNodeWidth() / 2,
-                    (item.top + offset).toFloat(),
-                    Paint()
-                )
-            } else {
-                c.drawCircle(
-                    xPosition,
-                    item.top + 8 + offset.toFloat(),
-                    8f,
-                    paint
-                )
-            }
+    override fun drawNode(
+        c: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+        xPosition: Float,
+        item: View,
+        adapterPosition: Int
+    ) {
+        paint.color = getColor(data[adapterPosition], parent)
+        // 画圆
+        if (adapterPosition == 0) {
+            val drawable = parent.resources.getDrawable(R.drawable.ic_uncheck)
+            c.drawBitmap(
+                drawableToBitmap(drawable),
+                xPosition - getNodeWidth() / 2,
+                (item.top + offset).toFloat(),
+                Paint()
+            )
+        } else {
+            c.drawCircle(
+                xPosition,
+                item.top + 8 + offset.toFloat(),
+                8f,
+                paint
+            )
 
         }
     }

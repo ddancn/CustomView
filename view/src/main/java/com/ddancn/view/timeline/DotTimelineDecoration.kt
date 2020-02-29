@@ -3,6 +3,7 @@ package com.ddancn.view.timeline
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -17,43 +18,43 @@ abstract class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
 
     var radius = 15
     var strokeWidth = 2f
-    var color = Color.RED
     var strokeColor = Color.WHITE
 
     var nodeType = NodeType.FILL_AND_STROKE
 
     init {
-        paint.color = color
+        paint.color = Color.RED
         strokePaint.style = Paint.Style.STROKE
         strokePaint.color = strokeColor
         strokePaint.strokeWidth = strokeWidth
     }
 
-    override fun drawNode(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val count = parent.childCount
-        for (i in 0 until count) {
-            val item = parent.getChildAt(i)
-            val xPosition = getLineX(item)
-            val adapterPosition = parent.getChildAdapterPosition(item)
-            paint.color = getColor(data[adapterPosition], parent)
-            // 画圆
-            if (nodeType == NodeType.FILL || nodeType == NodeType.FILL_AND_STROKE) {
-                c.drawCircle(
-                    xPosition,
-                    item.top + radius + offset.toFloat(),
-                    radius.toFloat(),
-                    paint
-                )
-            }
-            // 画圆的边框
-            if (nodeType == NodeType.STROKE || nodeType == NodeType.FILL_AND_STROKE) {
-                c.drawCircle(
-                    xPosition,
-                    item.top + radius + offset.toFloat(),
-                    radius.toFloat(),
-                    strokePaint
-                )
-            }
+    override fun drawNode(
+        c: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+        xPosition: Float,
+        item: View,
+        adapterPosition: Int
+    ) {
+        paint.color = getColor(data[adapterPosition], parent)
+        // 画圆
+        if (nodeType == NodeType.FILL || nodeType == NodeType.FILL_AND_STROKE) {
+            c.drawCircle(
+                xPosition,
+                item.top + radius + offset.toFloat(),
+                radius.toFloat(),
+                paint
+            )
+        }
+        // 画圆的边框
+        if (nodeType == NodeType.STROKE || nodeType == NodeType.FILL_AND_STROKE) {
+            c.drawCircle(
+                xPosition,
+                item.top + radius + offset.toFloat(),
+                radius.toFloat(),
+                strokePaint
+            )
         }
     }
 

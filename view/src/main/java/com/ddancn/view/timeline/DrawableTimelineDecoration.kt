@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
@@ -19,20 +20,22 @@ abstract class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
 
     lateinit var drawable: Drawable
 
-    override fun drawNode(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val count = parent.childCount
-        for (i in 0 until count) {
-            val item = parent.getChildAt(i)
-            val xPosition = getLineX(item)
-            val adapterPosition = parent.getChildAdapterPosition(item)
-            drawable = parent.resources.getDrawable(getDrawable(data[adapterPosition], parent))
-            c.drawBitmap(
-                drawableToBitmap(drawable),
-                xPosition-getNodeWidth()/2,
-                (item.top + offset).toFloat(),
-                Paint()
-            )
-        }
+    override fun drawNode(
+        c: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+        xPosition: Float,
+        item: View,
+        adapterPosition: Int
+    ) {
+        drawable = parent.resources.getDrawable(getDrawable(data[adapterPosition], parent))
+        c.drawBitmap(
+            drawableToBitmap(drawable),
+            xPosition - getNodeWidth() / 2,
+            (item.top + offset).toFloat(),
+            Paint()
+        )
+
     }
 
     @DrawableRes
