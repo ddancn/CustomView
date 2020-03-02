@@ -7,7 +7,7 @@
 * 还有一大堆可设置的属性
 
 ## 实现效果
-![demo](demo.jpg)
+![demo](demo.png)
 
 ## 使用方式
 根据具体要的效果，继承`DotTimelineDecoration/DrawableTimelineDecoration/BaseTimelineDecoration`，实现对应的抽象方法
