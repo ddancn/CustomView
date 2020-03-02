@@ -34,33 +34,37 @@ abstract class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
         parent: RecyclerView,
         state: RecyclerView.State,
         xPosition: Float,
-        item: View,
+        item: T,
+        itemView: View,
         adapterPosition: Int
     ) {
-        paint.color = getColor(data[adapterPosition], parent)
         // 画圆
         if (nodeType == NodeType.FILL || nodeType == NodeType.FILL_AND_STROKE) {
+            paint.color = getColor(item, parent)
             c.drawCircle(
                 xPosition,
-                item.top + radius + offset.toFloat(),
+                itemView.top + radius + offset.toFloat(),
                 radius.toFloat(),
                 paint
             )
         }
         // 画圆的边框
         if (nodeType == NodeType.STROKE || nodeType == NodeType.FILL_AND_STROKE) {
+            strokePaint.color = getColor(item, parent)
             c.drawCircle(
                 xPosition,
-                item.top + radius + offset.toFloat(),
+                itemView.top + radius + offset.toFloat(),
                 radius.toFloat(),
                 strokePaint
             )
         }
     }
 
-    override fun getNodeWidth(): Int = radius * 2
+    override fun getNodeWidth(item: T, adapterPosition: Int): Int = radius * 2
 
-    override fun getNodeHeight(): Int = radius * 2
+    override fun getNodeHeight(item: T, adapterPosition: Int): Int = radius * 2
+
+    override fun getMaxWidth(): Int = radius * 2
 
     enum class NodeType {
         FILL,

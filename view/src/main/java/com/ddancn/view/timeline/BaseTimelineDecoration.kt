@@ -29,34 +29,35 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
         super.onDraw(c, parent, state)
         val count = parent.childCount
         for (i in 0 until count) {
-            val item = parent.getChildAt(i)
-            val xPosition = getLineX(item)
-            val adapterPosition = parent.getChildAdapterPosition(item)
+            val itemView = parent.getChildAt(i)
+            val xPosition = getLineX(itemView)
+            val adapterPosition = parent.getChildAdapterPosition(itemView)
+            val item = data[adapterPosition]
             // 如果是第一个item，不画顶部的竖线
             if (adapterPosition != 0) {
                 // 设置上一个item颜色
                 paint.color = getColor(data[adapterPosition - 1], parent)
                 c.drawLine(
                     xPosition,
-                    item.top.toFloat(),
+                    itemView.top.toFloat(),
                     xPosition,
-                    item.top + getNodeHeight() / 2 + offset.toFloat(),
+                    itemView.top + offset.toFloat(),
                     paint
                 )
             }
             // 设置这一个item颜色
-            paint.color = getColor(data[adapterPosition], parent)
+            paint.color = getColor(item, parent)
             // 如果是最后一个item，不画底部的竖线
             if (adapterPosition != data.size - 1) {
                 c.drawLine(
                     xPosition,
-                    item.top + getNodeHeight() / 2 + offset.toFloat(),
+                    itemView.top + getNodeHeight(item, adapterPosition) + offset.toFloat(),
                     xPosition,
-                    item.bottom + itemMargin.toFloat(),
+                    itemView.bottom + itemMargin.toFloat(),
                     paint
                 )
             }
-            drawNode(c, parent, state, xPosition, item, adapterPosition)
+            drawNode(c, parent, state, xPosition, item, itemView, adapterPosition)
         }
     }
 
@@ -68,7 +69,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         // 设置整个decor的宽度
-        val width = paddingLeft + getNodeWidth() + paddingRight
+        val width = paddingLeft + getMaxWidth() + paddingRight
         if (direction == Direction.LEFT) {
             outRect.left = width
         } else {
@@ -84,9 +85,9 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
 
     private fun getLineX(view: View): Float =
         if (direction == Direction.LEFT) {
-            (getNodeWidth() / 2 + paddingLeft).toFloat()
+            (getMaxWidth() / 2 + paddingLeft).toFloat()
         } else {
-            view.right.toFloat() + paddingLeft + getNodeWidth() / 2
+            view.right.toFloat() + paddingLeft + getMaxWidth() / 2
         }
 
     /**
@@ -107,19 +108,25 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State,
         xPosition: Float,
-        item: View,
+        item: T,
+        itemView: View,
         adapterPosition: Int
     )
 
     /**
      * 结点宽度
      */
-    protected abstract fun getNodeWidth(): Int
+    protected abstract fun getNodeWidth(item: T, adapterPosition: Int): Int
 
     /**
      * 结点高度
      */
-    protected abstract fun getNodeHeight(): Int
+    protected abstract fun getNodeHeight(item: T, adapterPosition: Int): Int
+
+    /**
+     * 轴线最大宽度
+     */
+    protected abstract fun getMaxWidth(): Int
 
     enum class Direction {
         LEFT,

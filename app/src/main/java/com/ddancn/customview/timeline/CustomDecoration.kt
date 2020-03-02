@@ -30,23 +30,24 @@ class CustomDecoration : BaseTimelineDecoration<Record>() {
         parent: RecyclerView,
         state: RecyclerView.State,
         xPosition: Float,
-        item: View,
+        item: Record,
+        itemView: View,
         adapterPosition: Int
     ) {
-        paint.color = getColor(data[adapterPosition], parent)
-        // 画圆
+        paint.color = getColor(item, parent)
+        // 画图
         if (adapterPosition == 0) {
             val drawable = parent.resources.getDrawable(R.drawable.ic_uncheck)
             c.drawBitmap(
-                drawableToBitmap(drawable),
-                xPosition - getNodeWidth() / 2,
-                (item.top + offset).toFloat(),
+                drawableToBitmap(drawable, item, adapterPosition),
+                xPosition - getNodeWidth(item, adapterPosition) / 2,
+                (itemView.top + offset).toFloat(),
                 Paint()
             )
         } else {
             c.drawCircle(
                 xPosition,
-                item.top + 8 + offset.toFloat(),
+                itemView.top + 8 + offset.toFloat(),
                 8f,
                 paint
             )
@@ -54,10 +55,10 @@ class CustomDecoration : BaseTimelineDecoration<Record>() {
         }
     }
 
-    private fun drawableToBitmap(drawable: Drawable): Bitmap {
+    private fun drawableToBitmap(drawable: Drawable, item: Record, adapterPosition: Int): Bitmap {
         // 取 drawable 的长宽
-        val w = getNodeWidth()
-        val h = getNodeHeight()
+        val w = getNodeWidth(item, adapterPosition)
+        val h = getNodeHeight(item, adapterPosition)
         // 取 drawable 的颜色格式
         val config =
             if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
@@ -71,7 +72,9 @@ class CustomDecoration : BaseTimelineDecoration<Record>() {
         return bitmap
     }
 
-    override fun getNodeWidth(): Int = 30
+    override fun getNodeWidth(item: Record, adapterPosition: Int): Int = if (adapterPosition==0) 30 else 16
 
-    override fun getNodeHeight(): Int = 30
+    override fun getNodeHeight(item: Record, adapterPosition: Int): Int = if (adapterPosition==0) 30 else 16
+
+    override fun getMaxWidth(): Int = 30
 }

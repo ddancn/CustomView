@@ -11,7 +11,7 @@ import com.ddancn.view.timeline.DrawableTimelineDecoration
  *
  */
 class DrawableDecoration : DrawableTimelineDecoration<Record>() {
-    override fun getDrawable(item: Record, parent: RecyclerView): Int {
+    override fun getDrawable(item: Record, adapterPosition: Int, parent: RecyclerView): Int {
         return when (item.status) {
             1 -> R.drawable.ic_checked
             else -> R.drawable.ic_uncheck
@@ -25,8 +25,10 @@ class DrawableDecoration : DrawableTimelineDecoration<Record>() {
         }
     }
 
-    override fun getNodeWidth(): Int = 30
+    override fun getNodeWidth(item: Record, adapterPosition: Int): Int = 30
 
-    override fun getNodeHeight(): Int = 30
+    override fun getNodeHeight(item: Record, adapterPosition: Int): Int = 30
+
+    override fun getMaxWidth(): Int = 30
 
 }

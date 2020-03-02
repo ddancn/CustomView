@@ -25,26 +25,27 @@ abstract class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
         parent: RecyclerView,
         state: RecyclerView.State,
         xPosition: Float,
-        item: View,
+        item: T,
+        itemView: View,
         adapterPosition: Int
     ) {
-        drawable = parent.resources.getDrawable(getDrawable(data[adapterPosition], parent))
+        drawable = parent.resources.getDrawable(getDrawable(item, adapterPosition, parent))
         c.drawBitmap(
-            drawableToBitmap(drawable),
-            xPosition - getNodeWidth() / 2,
-            (item.top + offset).toFloat(),
+            drawableToBitmap(drawable, item, adapterPosition),
+            xPosition - getNodeWidth(item, adapterPosition) / 2,
+            (itemView.top + offset).toFloat(),
             Paint()
         )
 
     }
 
     @DrawableRes
-    abstract fun getDrawable(item: T, @NonNull parent: RecyclerView): Int
+    abstract fun getDrawable(item: T, adapterPosition: Int, @NonNull parent: RecyclerView): Int
 
-    private fun drawableToBitmap(drawable: Drawable): Bitmap {
+    private fun drawableToBitmap(drawable: Drawable, item: T, adapterPosition: Int): Bitmap {
         // 取 drawable 的长宽
-        val w = getNodeWidth()
-        val h = getNodeHeight()
+        val w = getNodeWidth(item, adapterPosition)
+        val h = getNodeHeight(item, adapterPosition)
         // 取 drawable 的颜色格式
         val config =
             if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565

@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ddancn.customview.timeline.*
 import com.ddancn.view.timeline.BaseTimelineDecoration
+import com.ddancn.view.timeline.DotTimelineDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,32 +31,36 @@ class MainActivity : AppCompatActivity() {
         color_group_shrink.setChosenListener(colorChoseListener)
     }
 
+    val records = ArrayList<Record>()
+    val adapter = RecordAdapter()
+
     private fun initTimelineList() {
-        val records = ArrayList<Record>()
         records.add(Record(1, "time", "content"))
         records.add(Record(2, "time", "content"))
         records.add(Record(3, "time", "content"))
-        val adapter = RecordAdapter()
         adapter.data = records
 
         val decor1 = DotDecoration()
-        decor1.data = records
-        rv_timeline1.layoutManager = LinearLayoutManager(this)
-        rv_timeline1.adapter = adapter
-        rv_timeline1.addItemDecoration(decor1)
+        setList(rv_timeline1, decor1)
 
-        val decor2 = DrawableDecoration()
-        decor2.data = records
-        decor2.direction = BaseTimelineDecoration.Direction.RIGHT
-        rv_timeline2.layoutManager = LinearLayoutManager(this)
-        rv_timeline2.adapter = adapter
-        rv_timeline2.addItemDecoration(decor2)
+        val decor2 = DotDecoration()
+        decor2.nodeType = DotTimelineDecoration.NodeType.STROKE
+        setList(rv_timeline2, decor2)
 
-        val decor3 = CustomDecoration()
-        decor3.data = records
+        val decor3 = DrawableDecoration()
         decor3.direction = BaseTimelineDecoration.Direction.RIGHT
-        rv_timeline3.layoutManager = LinearLayoutManager(this)
-        rv_timeline3.adapter = adapter
-        rv_timeline3.addItemDecoration(decor3)
+        setList(rv_timeline3, decor3)
+
+        val decor4 = CustomDecoration()
+        decor4.direction = BaseTimelineDecoration.Direction.RIGHT
+        setList(rv_timeline4, decor4)
+
+    }
+
+    private fun setList(recyclerView: RecyclerView, decoration: BaseTimelineDecoration<Record>){
+        decoration.data = records
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(decoration)
     }
 }
