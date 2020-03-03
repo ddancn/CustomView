@@ -46,7 +46,7 @@ class DotDecoration : DotTimelineDecoration<Record>() {
 1. 在`onDraw`中画了力所能及的东西：众所周知，能在最基础的基类里画的也只有那条轴线了
     * 注意到本方法是对整个RecyclerView进行绘制的，所以要先循环一下children
     * 线吧，它还要分成两部分来画。有两个原因：一是第一项不画上半条线，最后一项不画下半条线；二是以结点为分隔，上半条线是上一个item的颜色，下半条线才是这一个item的颜色。（还好这里刚好能获取整个列表对象
-    * 由于从RecyclerView获取的children只包括在屏幕范围中可见的，如果拿它们的position去数据源里配对的话，会出现错乱的情况。所以真正可用的position应该是getChildAdapterPosition
+    * 由于从RecyclerView获取的children只包括在屏幕范围中可见的，如果拿它们的position去数据源里配对的话，会出现错乱的情况。所以真正可用的position应该是`getChildAdapterPosition`
 2. 由`getItemOffset`方法设置了：
     * 整个decor的宽度，考虑了方向和自带的左右padding
     * 列表item项的间距，最后一项没有（这也是decoration最常见的用途）
@@ -54,10 +54,10 @@ class DotDecoration : DotTimelineDecoration<Record>() {
 4. 定义了一堆抽象方法等待子类来实现：
     * `getColor`：让子类根据状态返回不同的轴线颜色。不直接定义成属性是因为要实现【不同状态，不同颜色】。这似乎是模板模式？
     * `drawNode`：由子类自己绘制结点
-    * `getNodeWidth`和`getNodeHeight`：让子类返回结点的宽高。因为基类不画结点不知道宽高，但是需要设置decor的宽度和实现`getLineX`
-    * `getMaxWidth`：让子类返回最大结点的宽度（宽度可能不一样），是用来计算整个decor的宽度和轴线的x坐标的
+    * `getNodeWidth`和`getNodeHeight`：让子类返回结点的宽高。主要是画轴线需要知道高度
+    * `getMaxWidth`：让子类返回最大结点的宽度（因为宽度也可能根据状态不一样），是用来计算整个decor的宽度和轴线的x坐标的
 5. 其他可设置的属性：
-    * `offset`：结点离item上方的偏移量，一般根据具体的布局来设置
+    * `offset`：结点离item顶部的偏移量，一般根据具体的布局来设置
     * `itemMargin`：item的间距
     * `paddingLeft`和`paddingRight`：轴线的左右padding
     * `direction`：轴线在item左边还是右边
