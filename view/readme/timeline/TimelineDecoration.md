@@ -10,7 +10,9 @@
 ![demo](demo.png)
 
 ## 使用方式
-根据具体要的效果，继承`DotTimelineDecoration/DrawableTimelineDecoration/BaseTimelineDecoration`，实现对应的抽象方法
+根据具体要的效果，继承  
+`BaseTimelineDecoration / DotTimelineDecoration / DrawableTimelineDecoration`  
+实现对应的抽象方法
 ```kotlin
 // 省略声明列表、adapter等不是很有关的内容
 val decor = DotDecoration()// 需要自己继承实现
@@ -63,17 +65,17 @@ class DotDecoration : DotTimelineDecoration<Record>() {
     * `direction`：轴线在item左边还是右边
 
 ### DotTimelineDecoration
-1. 结点都是大小相同圆点的时间线，定义了一个重要属性就是圆的半径
+1. 结点都是大小相同圆点的时间线（如图中1），定义了一个重要属性就是圆的半径
 2. 重写了`drawNode`，绘制圆和圆的边框
 3. 重写了`getNodeWidth`和`getNodeHeight`和`getMaxWidth`，因为宽高由半径就可以确定了
 4. `getColor`依然留给子类重写，这时getColor同时代表了圆和轴线的颜色（也可以设计成分开，但是反正这样看起来比较和谐），子类只要实现这个方法就可以有各种颜色的Timeline了
 5. 其他可设置的属性：
     * `strokeWidth`：边框宽度
     * `strokeColor`：边框颜色（其实也可以做成抽象方法但是我懒得
-    * `nodeType`：结点类型，决定是否要边框，或者只要边框。如果只要边框，则此时用getColor方法设置边框的颜色
+    * `nodeType`：结点类型，决定是否要边框，或者只要边框。如果只要边框（如图中2），则此时用getColor方法设置边框的颜色
 
 ### DrawableTimelineDecoration
-1. 结点都是drawable的时间线，定义了一个重要属性就是drawable
+1. 结点都是drawable的时间线（如图中3），定义了一个重要属性就是drawable
 2. 重写了`drawNode`，绘制drawable
 3. 定义了`getDrawable`，让子类返回各种不同的drawable资源
 4. `getColor`还是留给子类重写，让它返回轴线的颜色，因为不可能从drawable里同时也知道这个颜色
@@ -81,7 +83,7 @@ class DotDecoration : DotTimelineDecoration<Record>() {
 
 > 暂时只提供了以上两种大体的效果，如果还要更复杂可以直接继承base类，drawNode任你实现，比如：
 ### CustomDecoration
-1. 实现第一个结点为图片，剩下结点为圆点的效果
+1. 实现第一个结点为图片，剩下结点为圆点的效果（如图中4）
 2. 实现所有的抽象方法就好了
 
 ## 一点感想
