@@ -6,8 +6,6 @@ import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -16,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
  * @date 2020/2/28
  *
  */
-abstract class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
+class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
 
-    lateinit var drawable: Drawable
+    lateinit var drawable: (item: T, position: Int) -> Drawable
 
     override fun drawNode(
         c: Canvas,
@@ -29,23 +27,18 @@ abstract class DrawableTimelineDecoration<T> : BaseTimelineDecoration<T>() {
         itemView: View,
         adapterPosition: Int
     ) {
-        drawable = parent.resources.getDrawable(getDrawable(item, adapterPosition, parent))
         c.drawBitmap(
-            drawableToBitmap(drawable, item, adapterPosition),
-            xPosition - getNodeWidth(item, adapterPosition) / 2,
+            drawableToBitmap(drawable(item, adapterPosition), item, adapterPosition),
+            xPosition - nodeWidth(item, adapterPosition) / 2,
             (itemView.top + offset).toFloat(),
             Paint()
         )
-
     }
-
-    @DrawableRes
-    abstract fun getDrawable(item: T, adapterPosition: Int, @NonNull parent: RecyclerView): Int
 
     private fun drawableToBitmap(drawable: Drawable, item: T, adapterPosition: Int): Bitmap {
         // 取 drawable 的长宽
-        val w = getNodeWidth(item, adapterPosition)
-        val h = getNodeHeight(item, adapterPosition)
+        val w = nodeWidth(item, adapterPosition)
+        val h = nodeHeight(item, adapterPosition)
         // 取 drawable 的颜色格式
         val config =
             if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565

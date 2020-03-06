@@ -1,11 +1,10 @@
 package com.ddancn.view.timeline
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -17,13 +16,33 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    // 数据源
+    var data: List<T> = ArrayList()
+
+    // 结点距离顶部的偏移量
     var offset = 15
+    // item间距
     var itemMargin = 15
+    // 列表的左右padding
     var paddingLeft = 15
     var paddingRight = 15
+    // 时间线在列表的位置
     var direction: Direction = Direction.LEFT
+    // 轴线宽度
+    var lineWidth = 2f
+        set(value) {
+            field = value
+            paint.strokeWidth = value
+        }
 
-    var data: List<T> = ArrayList()
+    // 轴线颜色
+    var color: (item: T, position: Int) -> Int = { _, _ -> Color.GRAY }
+    // 结点宽度
+    var nodeWidth: (item: T, position: Int) -> Int = { _, _ -> 15 }
+    // 结点高度
+    var nodeHeight: (item: T, position: Int) -> Int = { _, _ -> 15 }
+    // 最大宽度
+    var maxWidth = 15
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
@@ -33,10 +52,11 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
             val xPosition = getLineX(itemView)
             val adapterPosition = parent.getChildAdapterPosition(itemView)
             val item = data[adapterPosition]
+
             // 如果是第一个item，不画顶部的竖线
             if (adapterPosition != 0) {
                 // 设置上一个item颜色
-                paint.color = getColor(data[adapterPosition - 1], parent)
+                paint.color = color(data[adapterPosition - 1], adapterPosition - 1)
                 c.drawLine(
                     xPosition,
                     itemView.top.toFloat(),
@@ -46,12 +66,12 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
                 )
             }
             // 设置这一个item颜色
-            paint.color = getColor(item, parent)
+            paint.color = color(item, adapterPosition)
             // 如果是最后一个item，不画底部的竖线
             if (adapterPosition != data.size - 1) {
                 c.drawLine(
                     xPosition,
-                    itemView.top + getNodeHeight(item, adapterPosition) + offset.toFloat(),
+                    itemView.top + nodeHeight(item, adapterPosition) + offset.toFloat(),
                     xPosition,
                     itemView.bottom + itemMargin.toFloat(),
                     paint
@@ -69,7 +89,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         // 设置整个decor的宽度
-        val width = paddingLeft + getMaxWidth() + paddingRight
+        val width = paddingLeft + maxWidth + paddingRight
         if (direction == Direction.LEFT) {
             outRect.left = width
         } else {
@@ -85,20 +105,10 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
 
     private fun getLineX(view: View): Float =
         if (direction == Direction.LEFT) {
-            (getMaxWidth() / 2 + paddingLeft).toFloat()
+            (maxWidth / 2 + paddingLeft).toFloat()
         } else {
-            view.right.toFloat() + paddingLeft + getMaxWidth() / 2
+            view.right.toFloat() + paddingLeft + maxWidth / 2
         }
-
-    /**
-     * 子类设置在数据不同状态下返回什么颜色
-     *
-     * @param item   列表项
-     * @param parent RecyclerView
-     * @return 相应颜色
-     */
-    @ColorInt
-    protected abstract fun getColor(item: T, @NonNull parent: RecyclerView): Int
 
     /**
      * 子类负责绘制结点
@@ -112,21 +122,6 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
         itemView: View,
         adapterPosition: Int
     )
-
-    /**
-     * 结点宽度
-     */
-    protected abstract fun getNodeWidth(item: T, adapterPosition: Int): Int
-
-    /**
-     * 结点高度
-     */
-    protected abstract fun getNodeHeight(item: T, adapterPosition: Int): Int
-
-    /**
-     * 轴线最大宽度
-     */
-    protected abstract fun getMaxWidth(): Int
 
     enum class Direction {
         LEFT,

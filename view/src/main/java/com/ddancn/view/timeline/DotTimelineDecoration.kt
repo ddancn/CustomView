@@ -11,22 +11,31 @@ import androidx.recyclerview.widget.RecyclerView
  * @date 2020/2/28
  *
  */
-abstract class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
+class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    var radius = 15
+    var radius = 15f
     var strokeWidth = 2f
+        set(value) {
+            field = value
+            paint.strokeWidth = value
+        }
+
     var strokeColor = Color.WHITE
 
     var nodeType = NodeType.FILL_AND_STROKE
 
     init {
-        paint.color = Color.RED
+        paint.color = Color.GRAY
         strokePaint.style = Paint.Style.STROKE
         strokePaint.color = strokeColor
         strokePaint.strokeWidth = strokeWidth
+
+        nodeWidth = { _, _ -> radius.toInt() * 2 }
+        nodeHeight = { _, _ -> radius.toInt() * 2 }
+        maxWidth = radius.toInt() * 2
     }
 
     override fun drawNode(
@@ -40,31 +49,25 @@ abstract class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
     ) {
         // 画圆
         if (nodeType == NodeType.FILL || nodeType == NodeType.FILL_AND_STROKE) {
-            paint.color = getColor(item, parent)
+            paint.color = color(item, adapterPosition)
             c.drawCircle(
                 xPosition,
                 itemView.top + radius + offset.toFloat(),
-                radius.toFloat(),
+                radius,
                 paint
             )
         }
         // 画圆的边框
         if (nodeType == NodeType.STROKE || nodeType == NodeType.FILL_AND_STROKE) {
-            strokePaint.color = getColor(item, parent)
+            strokePaint.color = color(item, adapterPosition)
             c.drawCircle(
                 xPosition,
                 itemView.top + radius + offset.toFloat(),
-                radius.toFloat(),
+                radius,
                 strokePaint
             )
         }
     }
-
-    override fun getNodeWidth(item: T, adapterPosition: Int): Int = radius * 2
-
-    override fun getNodeHeight(item: T, adapterPosition: Int): Int = radius * 2
-
-    override fun getMaxWidth(): Int = radius * 2
 
     enum class NodeType {
         FILL,

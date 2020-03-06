@@ -1,64 +1,59 @@
-package com.ddancn.customview.timeline
+package com.ddancn.view.timeline
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.ddancn.customview.R
-import com.ddancn.view.timeline.BaseTimelineDecoration
 
 /**
  * @author ddan.zhuang
  * @date 2020/2/29
  *
  */
-class CustomDecoration : BaseTimelineDecoration<Record>() {
+class CustomDecoration<T> : BaseTimelineDecoration<T>() {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    var color = Color.parseColor("#2A9115")
 
-    init {
-        paint.color = color
-    }
-
-    override fun getColor(item: Record, parent: RecyclerView): Int {
-        return color
-    }
+    var radius = 8f
+    lateinit var drawable :Drawable
 
     override fun drawNode(
         c: Canvas,
         parent: RecyclerView,
         state: RecyclerView.State,
         xPosition: Float,
-        item: Record,
+        item: T,
         itemView: View,
         adapterPosition: Int
     ) {
-        paint.color = getColor(item, parent)
+        paint.color = color(item, adapterPosition)
         // 画图
         if (adapterPosition == 0) {
-            val drawable = parent.resources.getDrawable(R.drawable.ic_uncheck)
+            val drawable = drawable
             c.drawBitmap(
                 drawableToBitmap(drawable, item, adapterPosition),
-                xPosition - getNodeWidth(item, adapterPosition) / 2,
+                xPosition - nodeWidth(item, adapterPosition) / 2,
                 (itemView.top + offset).toFloat(),
                 Paint()
             )
         } else {
             c.drawCircle(
                 xPosition,
-                itemView.top + 8 + offset.toFloat(),
-                8f,
+                itemView.top + radius + offset.toFloat(),
+                radius,
                 paint
             )
 
         }
     }
 
-    private fun drawableToBitmap(drawable: Drawable, item: Record, adapterPosition: Int): Bitmap {
+    private fun drawableToBitmap(drawable: Drawable, item: T, adapterPosition: Int): Bitmap {
         // 取 drawable 的长宽
-        val w = getNodeWidth(item, adapterPosition)
-        val h = getNodeHeight(item, adapterPosition)
+        val w = nodeWidth(item, adapterPosition)
+        val h = nodeHeight(item, adapterPosition)
         // 取 drawable 的颜色格式
         val config =
             if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
@@ -71,10 +66,4 @@ class CustomDecoration : BaseTimelineDecoration<Record>() {
         drawable.draw(canvas)
         return bitmap
     }
-
-    override fun getNodeWidth(item: Record, adapterPosition: Int): Int = if (adapterPosition==0) 30 else 16
-
-    override fun getNodeHeight(item: Record, adapterPosition: Int): Int = if (adapterPosition==0) 30 else 16
-
-    override fun getMaxWidth(): Int = 30
 }
