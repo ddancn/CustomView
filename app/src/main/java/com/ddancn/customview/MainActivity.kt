@@ -71,12 +71,12 @@ class MainActivity : AppCompatActivity() {
         setList(rv_timeline2, decor2)
 
         // 第三种，drawable，设置drawable资源、居右、轴线颜色、结点大小
-        val decor3 = DrawableTimelineDecoration<Record>()
+        val decor3 = DrawableTimelineDecoration<Record>(this)
         decor3.direction = BaseTimelineDecoration.Direction.RIGHT
         decor3.drawable = { item, _ ->
             when (item.status) {
-                1 -> resources.getDrawable(R.drawable.ic_checked)
-                else -> resources.getDrawable(R.drawable.ic_uncheck)
+                1 -> R.drawable.ic_checked
+                else -> R.drawable.ic_uncheck
             }
         }
         decor3.color = { item, _ ->
@@ -91,8 +91,8 @@ class MainActivity : AppCompatActivity() {
         setList(rv_timeline3, decor3)
 
         // 第四种，drawable+小圆点，设置drawable资源、居右、轴线结点颜色、结点大小
-        val decor4 = CustomDecoration<Record>()
-        decor4.drawable = resources.getDrawable(R.drawable.ic_uncheck)
+        val decor4 = CustomDecoration<Record>(this)
+        decor4.drawable = R.drawable.ic_uncheck
         decor4.color = { _, _ -> resources.getColor(R.color.colorPrimary) }
         decor4.direction = BaseTimelineDecoration.Direction.RIGHT
         decor4.radius = 8f

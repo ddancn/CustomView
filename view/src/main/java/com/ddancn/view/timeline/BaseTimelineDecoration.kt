@@ -53,7 +53,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
             val adapterPosition = parent.getChildAdapterPosition(itemView)
             val item = data[adapterPosition]
 
-            // 如果是第一个item，不画顶部的竖线
+            // 画上线。第一个item不画
             if (adapterPosition != 0) {
                 // 设置上一个item颜色
                 paint.color = color(data[adapterPosition - 1], adapterPosition - 1)
@@ -67,7 +67,7 @@ abstract class BaseTimelineDecoration<T> : RecyclerView.ItemDecoration() {
             }
             // 设置这一个item颜色
             paint.color = color(item, adapterPosition)
-            // 如果是最后一个item，不画底部的竖线
+            // 画下线。最后一个item不画
             if (adapterPosition != data.size - 1) {
                 c.drawLine(
                     xPosition,
