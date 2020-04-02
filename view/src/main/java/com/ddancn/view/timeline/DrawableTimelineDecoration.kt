@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class DrawableTimelineDecoration<T>(private val context: Context) : BaseTimelineDecoration<T>() {
 
-    lateinit var drawable: (item: T, position: Int) -> Int
+    lateinit var drawableRes: (item: T, position: Int) -> Int
 
     override fun drawNode(
         c: Canvas,
@@ -25,7 +25,7 @@ class DrawableTimelineDecoration<T>(private val context: Context) : BaseTimeline
         adapterPosition: Int
     ) {
         val bitmap =
-            BitmapFactory.decodeResource(context.resources, drawable(item, adapterPosition))
+            BitmapFactory.decodeResource(context.resources, drawableRes(item, adapterPosition))
         val src = Rect(0, 0, bitmap.width, bitmap.height)
 
         val left = xPosition - nodeWidth(item, adapterPosition) / 2

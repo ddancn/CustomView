@@ -15,7 +15,7 @@ class CustomDecoration<T>(private val context: Context) : BaseTimelineDecoration
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     var radius = 8f
-    var drawable: Int = 0
+    var drawableRes: Int = 0
 
     override fun drawNode(
         c: Canvas,
@@ -29,7 +29,7 @@ class CustomDecoration<T>(private val context: Context) : BaseTimelineDecoration
         paint.color = color(item, adapterPosition)
         // 画图
         if (adapterPosition == 0) {
-            val bitmap = BitmapFactory.decodeResource(context.resources, drawable)
+            val bitmap = BitmapFactory.decodeResource(context.resources, drawableRes)
             val src = Rect(0, 0, bitmap.width, bitmap.height)
 
             val left = xPosition - nodeWidth(item, adapterPosition) / 2

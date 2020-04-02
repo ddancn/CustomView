@@ -23,14 +23,13 @@ class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
             paint.strokeWidth = value
         }
 
-    var strokeColor = Color.WHITE
+    var strokeColor : (item: T, position: Int) -> Int = { _, _ -> Color.GRAY }
 
     var nodeType = NodeType.FILL_AND_STROKE
 
     init {
         paint.color = Color.GRAY
         strokePaint.style = Paint.Style.STROKE
-        strokePaint.color = strokeColor
         strokePaint.strokeWidth = strokeWidth
 
         nodeWidth = { _, _ -> radius.toInt() * 2 }
@@ -59,7 +58,7 @@ class DotTimelineDecoration<T> : BaseTimelineDecoration<T>() {
         }
         // 画圆的边框
         if (nodeType == NodeType.STROKE || nodeType == NodeType.FILL_AND_STROKE) {
-            strokePaint.color = color(item, adapterPosition)
+            strokePaint.color = strokeColor(item, adapterPosition)
             c.drawCircle(
                 xPosition,
                 itemView.top + radius + offset.toFloat(),

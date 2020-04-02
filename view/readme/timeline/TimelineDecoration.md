@@ -9,8 +9,8 @@
 
 ## 使用方式
 根据具体要的效果选择
-1. 继承`BaseTimelineDecoration`，实现`drawNode`方法，设置属性
-1. 选择已经实现了抽象方法的`DotTimelineDecoration / DrawableTimelineDecoration / CustomTimelineDecoration`一种，设置属性 
+1. 继承`BaseTimelineDecoration`，实现`drawNode`方法，设置合适的属性
+1. 选择已经实现了该抽象方法的`DotTimelineDecoration / DrawableTimelineDecoration / CustomTimelineDecoration`一种，设置合适的属性 
   
 ```kotlin
 // 省略声明列表、adapter等不是很有关的内容
@@ -22,8 +22,8 @@ recyclerView.addItemDecoration(decor)
 
 属性概览
 * `color`：: (item: T, position: Int) -> Int，轴线颜色。item是当前项数据，position是其在adapter中的位置
-* `getNodeWidth`和`getNodeHeight`：: (item: T, position: Int) -> Int，结点宽高
-* `getMaxWidth: Int`：可能的最大结点宽度
+* `nodeWidth`和`nodeHeight`：: (item: T, position: Int) -> Int，结点宽高
+* `maxWidth: Int`：可能的最大结点宽度
 * `offset: Int`：结点离item顶部的偏移量，根据具体的布局来设置就好
 * `itemMargin: Int`：item的间距
 * `paddingLeft: Int`和`paddingRight: Int`：轴线的左右padding
@@ -59,7 +59,7 @@ recyclerView.addItemDecoration(decor)
 1. 使用时设置`color`属性即可
 1. 其他可设置的属性：
     * `strokeWidth`：边框宽度
-    * `strokeColor`：边框颜色，默认白（其实也可以做成函数类型但是我懒得
+    * `strokeColor`：边框颜色，函数类型
     * `nodeType`：结点类型，决定是否要边框，或者只要边框。如果只要边框（如图中2），则此时设置边框的颜色为color
 
 ### DrawableTimelineDecoration
