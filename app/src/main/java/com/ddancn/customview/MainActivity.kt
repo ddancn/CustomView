@@ -1,5 +1,6 @@
 package com.ddancn.customview
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.ddancn.view.timeline.CustomDecoration
 import com.ddancn.view.timeline.DotTimelineDecoration
 import com.ddancn.view.timeline.DrawableTimelineDecoration
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         initColorGroup()
 
         initTimelineList()
+
+        initCircularProgress()
     }
 
     private fun initColorGroup() {
@@ -50,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = adapter
             recyclerView.addItemDecoration(decoration)
         }
+
         // 返回颜色
         fun setColor(item: Record): Int {
             return when (item.status) {
@@ -100,5 +105,18 @@ class MainActivity : AppCompatActivity() {
         decor4.nodeHeight = { _, adapterPosition -> if (adapterPosition == 0) 30 else 16 }
         decor4.maxWidth = 30
         setList(rv_timeline4, decor4)
+    }
+
+
+    private fun initCircularProgress() {
+        fun startProgress(progress: Float) {
+            circular_progress.start(progress).addUpdateListener { animation ->
+                val progressNow = animation.getAnimatedValue("progress") as Float
+                tv_progress.text = String.format("%.1f%%", progressNow)
+            }
+        }
+
+        startProgress(65f)
+        bt_progress.setOnClickListener { startProgress(Random.nextFloat() * 100) }
     }
 }

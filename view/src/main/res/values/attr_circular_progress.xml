@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularProgress">
+        <!--线条宽度-->
+        <attr name="cg_strokeWidth" format="dimension" />
+        <!--线条颜色-->
+        <attr name="cg_color" format="color" />
+    </declare-styleable>
+</resources>
