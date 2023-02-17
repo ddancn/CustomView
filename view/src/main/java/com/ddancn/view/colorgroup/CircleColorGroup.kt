@@ -146,17 +146,19 @@ class CircleColorGroup(context: Context, attrs: AttributeSet? = null) :
             holder.itemView.layoutParams = lp
             // 设置其他属性
             val color = colorList[position]
-            holder.itemView as CircleColor
-            holder.itemView.setColor(color)
-            holder.itemView.radius = radius
-            holder.itemView.strokeWidth = strokeWidth
-            holder.itemView.strokeGap = strokeGap
-            holder.itemView.anim = anim
-            // 默认选中第一个
-            holder.itemView.setChosen(position == 0)
-            holder.itemView.setOnClickListener {
-                onChosenListener?.invoke(color, position)
+            (holder.itemView as CircleColor).apply {
+                this.setColor(color)
+                this.radius = this@CircleColorGroup.radius
+                this.strokeWidth = this@CircleColorGroup.strokeWidth
+                this.strokeGap = this@CircleColorGroup.strokeGap
+                this.anim = this@CircleColorGroup.anim
+                // 默认选中第一个
+                this.setChosen(position == 0)
+                this.setOnClickListener {
+                    onChosenListener?.invoke(color, position)
+                }
             }
+
         }
 
     }
