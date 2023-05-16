@@ -8,7 +8,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/activity_main.xml" value="0.35643115942028986" />
+        <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/item_timeline_record.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>
