@@ -24,9 +24,9 @@
             <enum name="bounce" value="2"/>
         </attr>
         <!--动画时长，动画类型不为none时生效-->
-        <attr name="ccg_animDuration" value="integer"/>
+        <attr name="ccg_animDuration" format="integer"/>
         <!--动画缩放比例，动画类型不为NULL时生效-->
-        <attr name="ccg_animScale" value="float"/>
+        <attr name="ccg_animScale" format="float"/>
     </declare-styleable>
 
 </resources>

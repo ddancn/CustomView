@@ -7,14 +7,14 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.OvershootInterpolator
+import android.view.animation.DecelerateInterpolator
 import com.ddancn.view.R
-import kotlin.math.min
 
 
 /**
  * @author ddan.zhuang
  * @date 2023/2/16
+ * 环形进度条
  */
 class CircularProgress(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
@@ -50,7 +50,7 @@ class CircularProgress(context: Context, attrs: AttributeSet? = null) : View(con
         ObjectAnimator.ofFloat(this, "progress", 0f, progress).apply {
             if (duration == 0L)
                 this.duration = (progress * 10).toLong() + 100
-            this.interpolator = OvershootInterpolator(1f)
+            this.interpolator = DecelerateInterpolator(1f)
             this.start()
         }
 

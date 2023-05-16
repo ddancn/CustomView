@@ -7,8 +7,8 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Build
 import android.util.AttributeSet
-import android.widget.TextView
 import androidx.annotation.IntRange
+import androidx.appcompat.widget.AppCompatTextView
 import com.ddancn.view.R
 import kotlin.math.max
 
@@ -19,7 +19,7 @@ import kotlin.math.max
  * 支持设置边框颜色和宽度、圆角大小、背景颜色、填充模式（边框，背景，全部）
  * 默认边框颜色为文字颜色，背景颜色为边框颜色，模式为边框，自带左右padding
  */
-class TagTextView(context: Context, attrs: AttributeSet?) : TextView(context, attrs) {
+class TagTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val borderColor: Int
