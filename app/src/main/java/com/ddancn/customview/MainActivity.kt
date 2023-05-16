@@ -1,6 +1,5 @@
 package com.ddancn.customview
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
@@ -28,6 +27,8 @@ class MainActivity : AppCompatActivity() {
         initTimelineList()
 
         initCircularProgress()
+
+        initSeekingBar()
     }
 
     private fun initColorGroup() {
@@ -107,7 +108,6 @@ class MainActivity : AppCompatActivity() {
         setList(rv_timeline4, decor4)
     }
 
-
     private fun initCircularProgress() {
         fun startProgress(progress: Float) {
             circular_progress.start(progress).addUpdateListener { animation ->
@@ -119,4 +119,27 @@ class MainActivity : AppCompatActivity() {
         startProgress(65f)
         bt_progress.setOnClickListener { startProgress(Random.nextFloat() * 100) }
     }
+
+    private fun initSeekingBar() {
+        fun format(progress: Int) =
+            String.format("%d, %.1f%%", progress, progress * 100.0 / seeking_bar.max)
+
+        tv_seeking_bar.text = format(seeking_bar.progress)
+        seeking_bar.onProgressChange = { progress ->
+            tv_seeking_bar.text = format(progress)
+        }
+        bt_seeking_bar_minus.setOnClickListener { seeking_bar.progress -= 5 }
+        bt_seeking_bar_add.setOnClickListener { seeking_bar.progress += 5 }
+
+        sw_tintMark.setOnCheckedChangeListener { buttonView, isChecked ->
+            seeking_bar.tickMark = isChecked
+            if (!isChecked) {
+                sw_tintMark_absorb.isChecked = false
+            }
+        }
+        sw_tintMark_absorb.setOnCheckedChangeListener { buttonView, isChecked ->
+            seeking_bar.tickMarkAbsorb = isChecked
+        }
+    }
+
 }

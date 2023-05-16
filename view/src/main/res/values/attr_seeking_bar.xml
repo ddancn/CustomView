@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SeekingBar">
+        <!--进度条最大值-->
+        <attr name="sb_max" format="integer" />
+        <!--是否有刻度-->
+        <attr name="sb_tickMark" format="boolean" />
+        <!--一格刻度的值-->
+        <attr name="sb_tickMark_step" format="integer" />
+        <!--是否吸附刻度-->
+        <attr name="sb_tickMark_absorb" format="boolean" />
+    </declare-styleable>
+</resources>

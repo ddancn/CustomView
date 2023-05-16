@@ -6,17 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="---------- TagTextView ----------"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.ddancn.view.tag.TagTextView
         android:id="@+id/tag1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/tag_tv_1"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv1" />
 
     <com.ddancn.view.tag.TagTextView
         android:id="@+id/tag2"
@@ -44,12 +54,22 @@
         app:ttv_borderColor="@color/colorPrimaryDark"
         app:ttv_fillMode="all" />
 
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="---------- CircleColorGroup ----------"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tag1" />
+
     <com.ddancn.view.colorgroup.CircleColorGroup
         android:id="@+id/color_group_bounce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         app:ccg_animType="bounce"
         app:ccg_column="5"
@@ -57,7 +77,7 @@
         app:ccg_itemMarginVertical="3dp"
         app:ccg_radius="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tag1" />
+        app:layout_constraintTop_toBottomOf="@id/tv2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,65 +108,157 @@
         app:layout_constraintBottom_toBottomOf="@id/color_group_shrink"
         app:layout_constraintLeft_toRightOf="@id/color_group_shrink" />
 
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="---------- Timeline ----------"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/color_group_shrink" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_timeline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toBottomOf="@id/color_group_shrink"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_timeline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/rv_timeline1"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toTopOf="@id/rv_timeline1"/>
+        app:layout_constraintLeft_toRightOf="@id/rv_timeline1"
+        app:layout_constraintTop_toTopOf="@id/rv_timeline1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_timeline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/rv_timeline2"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toTopOf="@id/rv_timeline1"/>
+        app:layout_constraintLeft_toRightOf="@id/rv_timeline2"
+        app:layout_constraintTop_toTopOf="@id/rv_timeline1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_timeline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/rv_timeline3"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toTopOf="@id/rv_timeline1"/>
+        app:layout_constraintLeft_toRightOf="@id/rv_timeline3"
+        app:layout_constraintTop_toTopOf="@id/rv_timeline1" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="---------- CircularProgress ----------"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_timeline1" />
 
     <com.ddancn.view.circularprogress.CircularProgress
         android:id="@+id/circular_progress"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toBottomOf="@id/rv_timeline1"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv4" />
 
     <TextView
         android:id="@+id/tv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="@id/circular_progress"
         app:layout_constraintBottom_toBottomOf="@id/circular_progress"
-        app:layout_constraintStart_toStartOf="@id/circular_progress"
         app:layout_constraintEnd_toEndOf="@id/circular_progress"
-        tools:text="20%"/>
+        app:layout_constraintStart_toStartOf="@id/circular_progress"
+        app:layout_constraintTop_toTopOf="@id/circular_progress"
+        tools:text="20%" />
 
     <Button
         android:id="@+id/bt_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/circular_progress"
-        app:layout_constraintStart_toEndOf="@id/circular_progress"
         android:layout_marginStart="20dp"
-        android:text="@string/progress_start"/>
+        android:text="@string/progress_start"
+        app:layout_constraintStart_toEndOf="@id/circular_progress"
+        app:layout_constraintTop_toTopOf="@id/circular_progress" />
+
+    <TextView
+        android:id="@+id/tv5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="---------- SeekingBar ----------"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/circular_progress" />
+
+    <com.ddancn.view.seekingbar.SeekingBar
+        android:id="@+id/seeking_bar"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv5"
+        app:sb_max="100"/>
+
+    <TextView
+        android:id="@+id/tv_seeking_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/seeking_bar"
+        app:layout_constraintStart_toEndOf="@id/seeking_bar"
+        app:layout_constraintTop_toTopOf="@id/seeking_bar"
+        tools:text="20%" />
+
+    <Button
+        android:id="@+id/bt_seeking_bar_minus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="-5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seeking_bar" />
+
+    <Button
+        android:id="@+id/bt_seeking_bar_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="+5"
+        app:layout_constraintStart_toEndOf="@id/bt_seeking_bar_minus"
+        app:layout_constraintTop_toTopOf="@id/bt_seeking_bar_minus" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_tintMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="刻度"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_seeking_bar_minus"
+        app:layout_constraintStart_toEndOf="@+id/bt_seeking_bar_add"
+        app:layout_constraintTop_toTopOf="@+id/bt_seeking_bar_minus" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_tintMark_absorb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="吸附"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_seeking_bar_minus"
+        app:layout_constraintStart_toEndOf="@+id/sw_tintMark"
+        app:layout_constraintTop_toTopOf="@+id/bt_seeking_bar_minus" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
