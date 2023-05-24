@@ -24,12 +24,15 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private val thumbR = 15f
 
     private val barColor = Color.LTGRAY
-    private val barWidth = 8f
+    private val barHeight = 8f
+    private val barWidth
+        get() = width - 2 * thumbR
 
     /**
      * 进度条最大值
      */
     val max: Int
+
     /**
      * 是否有刻度
      */
@@ -38,10 +41,12 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
             invalidate()
             field = value
         }
+
     /**
      * 一格刻度的值
      */
     var tickMarkStep: Int
+
     /**
      * 是否吸附刻度
      */
@@ -52,20 +57,23 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
      */
     var progress = 0
         set(value) {
-            val limitValue = if (value < 0) 0 else (if (value > max) max else value)
+            val limitValue = value.coerceIn(0, max)
             field = limitValue
-            thumbX = (width - 2 * thumbR) * limitValue / max + thumbR
+            thumbX = barWidth / max * limitValue + thumbR
             onProgressChange?.invoke(progress)
             invalidate()
         }
+
     /**
      * 滑块所在的x坐标，随progress而变动
      */
     private var thumbX = 0f
+
     /**
      * 按下时判断是否按住了滑块（是否要拖动）
      */
     private var isDragging = false
+
     /**
      * 滑动时的监听
      */
@@ -80,20 +88,25 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         thumbX = thumbR
 
-        thumbPaint.style = Paint.Style.STROKE
         thumbPaint.strokeCap = Paint.Cap.ROUND
         thumbPaint.strokeWidth = thumbR * 2
         thumbPaint.color = thumbColor
 
-        barPaint.style = Paint.Style.STROKE
         barPaint.strokeCap = Paint.Cap.ROUND
-        barPaint.strokeWidth = barWidth
+        barPaint.strokeWidth = barHeight
         barPaint.color = barColor
 
-        tickPaint.style = Paint.Style.STROKE
-        tickPaint.strokeCap = Paint.Cap.ROUND
-        tickPaint.strokeWidth = 4f
+        tickPaint.strokeWidth = 3f
         tickPaint.color = barColor
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val desiredWidth = 50
+        val desiredHeight = (thumbR * 2).toInt()
+        val width = resolveSize(desiredWidth, widthMeasureSpec)
+        val height = resolveSize(desiredHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
     }
 
     override fun draw(canvas: Canvas?) {
@@ -107,7 +120,7 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         // 画刻度
         if (tickMark) {
             for (i in 0..max / tickMarkStep) {
-                val x = (width - 2 * thumbR) * i * tickMarkStep / max + thumbR
+                val x = barWidth / max * i * tickMarkStep + thumbR
                 canvas?.drawLine(x, h - 6, x, h + 6, tickPaint)
             }
         }
@@ -122,19 +135,19 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
                 val x = event.x
                 val y = event.y
                 val h = (height / 2).toFloat()
-                // 点滑块位置，准备进行拖动
-                if (x in thumbX - thumbR..thumbX + thumbR && y in h - thumbR..h + thumbR) {
+                // 点滑块位置，准备进行拖动。范围稍微扩大，使用更加友好
+                if (x in around(thumbX, thumbR * 1.2f) && y in around(h, thumbR * 1.2f)) {
                     isDragging = true
                 }
                 // 点进度条位置，直接定位过去
                 else if (y in h - thumbR..h + thumbR) {
-                    progress = ((x - thumbR) / (width - 2 * thumbR) * max).toInt()
+                    progress = ((x - thumbR) / barWidth * max).toInt()
                 }
             }
             MotionEvent.ACTION_MOVE -> {
                 val x = event.x
                 if (isDragging) {
-                    progress = ((x - thumbR) / (width - 2 * thumbR) * max).toInt()
+                    progress = ((x - thumbR) / barWidth * max).toInt()
                 }
             }
             MotionEvent.ACTION_UP -> {
@@ -149,5 +162,7 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         }
         return true
     }
+
+    private fun around(x: Float, y: Float) = x - y..x + y
 
 }

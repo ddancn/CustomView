@@ -138,6 +138,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         sw_tintMark_absorb.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                sw_tintMark.isChecked = true
+            }
+            seeking_bar.tickMark = isChecked
             seeking_bar.tickMarkAbsorb = isChecked
         }
     }
