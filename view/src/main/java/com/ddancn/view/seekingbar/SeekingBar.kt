@@ -140,7 +140,7 @@ class SeekingBar(context: Context, attrs: AttributeSet?) : View(context, attrs) 
                     isDragging = true
                 }
                 // 点进度条位置，直接定位过去
-                else if (y in h - thumbR..h + thumbR) {
+                else if (y in around(h, thumbR * 1.2f)) {
                     progress = ((x - thumbR) / barWidth * max).toInt()
                 }
             }
