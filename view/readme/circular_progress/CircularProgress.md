@@ -6,7 +6,7 @@
 给出了动画的`ObjectAnimator`对象，对其设置监听，可以在进度条动画的同时改变文字
 
 ## 实现效果
-![demo](https://github.com/ddancn/CustomView/blob/master/view/readme/circular_progress/demo.jpg)
+![demo](https://github.com/ddancn/CustomView/blob/master/view/readme/circular_progress/demo.gif)
 
 ## 使用方式
 ```xml

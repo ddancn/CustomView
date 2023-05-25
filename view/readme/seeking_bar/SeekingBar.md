@@ -5,7 +5,7 @@
 * 支持显示和吸附刻度（默认不）
 
 ## 实现效果
-![demo](https://github.com/ddancn/CustomView/blob/master/view/readme/seeking_bar/demo.jpg)
+![demo](https://github.com/ddancn/CustomView/blob/master/view/readme/seeking_bar/demo.gif)
 
 ## 使用方式
 ```xml
