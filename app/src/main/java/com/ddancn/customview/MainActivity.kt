@@ -7,20 +7,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ddancn.customview.databinding.ActivityMainBinding
 import com.ddancn.customview.timeline.Record
 import com.ddancn.customview.timeline.RecordAdapter
 import com.ddancn.view.timeline.BaseTimelineDecoration
 import com.ddancn.view.timeline.CustomDecoration
 import com.ddancn.view.timeline.DotTimelineDecoration
 import com.ddancn.view.timeline.DrawableTimelineDecoration
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initColorGroup()
 
@@ -36,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "选择了第${position + 1}个颜色${color.toColor()}", Toast.LENGTH_SHORT)
                 .show()
         }
-        color_group_bounce.setChosenListener(colorChoseListener)
-        color_group_shrink.setChosenListener(colorChoseListener)
+        binding.colorGroupBounce.setChosenListener(colorChoseListener)
+        binding.colorGroupShrink.setChosenListener(colorChoseListener)
     }
 
     private fun initTimelineList() {
@@ -68,13 +71,13 @@ class MainActivity : AppCompatActivity() {
         // 第一种，实心圆形，仅设置颜色
         val decor1 = DotTimelineDecoration<Record>()
         decor1.color = { item, _ -> setColor(item) }
-        setList(rv_timeline1, decor1)
+        setList(binding.rvTimeline1, decor1)
 
         // 第二种，空心圆形，设置颜色、结点类型、轴线宽度
         val decor2 = DotTimelineDecoration<Record>()
         decor2.nodeType = DotTimelineDecoration.NodeType.STROKE
         decor2.color = { item, _ -> setColor(item) }
-        setList(rv_timeline2, decor2)
+        setList(binding.rvTimeline2, decor2)
 
         // 第三种，drawable，设置drawable资源、居右、轴线颜色、结点大小
         val decor3 = DrawableTimelineDecoration<Record>(this)
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         decor3.nodeWidth = { _, _ -> 30 }
         decor3.nodeHeight = { _, _ -> 30 }
         decor3.maxWidth = 30
-        setList(rv_timeline3, decor3)
+        setList(binding.rvTimeline3, decor3)
 
         // 第四种，drawable+小圆点，设置drawable资源、居右、轴线结点颜色、结点大小
         val decor4 = CustomDecoration<Record>(this)
@@ -105,44 +108,44 @@ class MainActivity : AppCompatActivity() {
         decor4.nodeWidth = { _, adapterPosition -> if (adapterPosition == 0) 30 else 16 }
         decor4.nodeHeight = { _, adapterPosition -> if (adapterPosition == 0) 30 else 16 }
         decor4.maxWidth = 30
-        setList(rv_timeline4, decor4)
+        setList(binding.rvTimeline4, decor4)
     }
 
     private fun initCircularProgress() {
         fun startProgress(progress: Float) {
-            circular_progress.start(progress).addUpdateListener { animation ->
+            binding.circularProgress.start(progress).addUpdateListener { animation ->
                 val progressNow = animation.getAnimatedValue("progress") as Float
-                tv_progress.text = String.format("%.1f%%", progressNow)
+                binding.tvProgress.text = String.format("%.1f%%", progressNow)
             }
         }
 
         startProgress(65f)
-        bt_progress.setOnClickListener { startProgress(Random.nextFloat() * 100) }
+        binding.btProgress.setOnClickListener { startProgress(Random.nextFloat() * 100) }
     }
 
     private fun initSeekingBar() {
         fun format(progress: Int) =
-            String.format("%d, %.1f%%", progress, progress * 100.0 / seeking_bar.max)
+            String.format("%d, %.1f%%", progress, progress * 100.0 / binding.seekingBar.max)
 
-        tv_seeking_bar.text = format(seeking_bar.progress)
-        seeking_bar.onProgressChange = { progress ->
-            tv_seeking_bar.text = format(progress)
+        binding.tvSeekingBar.text = format(binding.seekingBar.progress)
+        binding.seekingBar.onProgressChange = { progress ->
+            binding.tvSeekingBar.text = format(progress)
         }
-        bt_seeking_bar_minus.setOnClickListener { seeking_bar.progress -= 5 }
-        bt_seeking_bar_add.setOnClickListener { seeking_bar.progress += 5 }
+        binding.btSeekingBarMinus.setOnClickListener { binding.seekingBar.progress -= 5 }
+        binding.btSeekingBarAdd.setOnClickListener { binding.seekingBar.progress += 5 }
 
-        sw_tintMark.setOnCheckedChangeListener { buttonView, isChecked ->
-            seeking_bar.tickMark = isChecked
+        binding.swTintMark.setOnCheckedChangeListener { buttonView, isChecked ->
+            binding.seekingBar.tickMark = isChecked
             if (!isChecked) {
-                sw_tintMark_absorb.isChecked = false
+                binding.swTintMarkAbsorb.isChecked = false
             }
         }
-        sw_tintMark_absorb.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.swTintMarkAbsorb.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                sw_tintMark.isChecked = true
+                binding.swTintMark.isChecked = true
             }
-            seeking_bar.tickMark = isChecked
-            seeking_bar.tickMarkAbsorb = isChecked
+            binding.seekingBar.tickMark = isChecked
+            binding.seekingBar.tickMarkAbsorb = isChecked
         }
     }
 
