@@ -8,6 +8,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/activity_chess_board.xml" value="0.36614583333333334" />
         <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/my/CustomView/app/src/main/res/layout/item_timeline_record.xml" value="0.36614583333333334" />
       </map>
