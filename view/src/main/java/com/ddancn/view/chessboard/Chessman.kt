@@ -11,6 +11,5 @@ data class Chessman(var type: ChessType, var level:Int = 1, var color: Int = Col
 
 enum class ChessType {
     Emitter,
-    Normal,
-    None
+    Normal
 }
