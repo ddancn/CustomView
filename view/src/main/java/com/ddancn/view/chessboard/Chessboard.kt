@@ -1,5 +1,8 @@
 package com.ddancn.view.chessboard
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -53,6 +56,7 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
         drawBg(canvas)
         drawChessmen(canvas)
         drawMovingChessman(canvas)
+        drawAnimChessman(canvas)
     }
 
     /**
@@ -83,16 +87,16 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
         content.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
                 cell?.let {
-                    drawChessman(
-                        canvas,
-                        cell,
-                        ((j + 0.5) * cellSize).toFloat(),
-                        ((i + 0.5) * cellSize).toFloat()
-                    )
+                    drawChessman(canvas, cell, calPos(j), calPos(i))
                 }
             }
         }
     }
+
+    /**
+     * 由行列数计算真实坐标
+     */
+    private fun calPos(i: Int) = ((i + 0.5) * cellSize).toFloat()
 
     /**
      * 画单个棋子
@@ -118,12 +122,30 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
     private var movingCell: Chessman? = null
     private var curColIdx = 0
     private var curRowIdx = 0
+    private var animX = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
+    private var animY = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
+    private var animCell: Chessman? = null
 
     /**
      * 画正在被移动的棋子
      */
     private fun drawMovingChessman(canvas: Canvas?) {
         movingCell?.let { drawChessman(canvas, it, movingX, movingY) }
+    }
+
+    /**
+     * 画正在做动画的棋子
+     */
+    private fun drawAnimChessman(canvas: Canvas?) {
+        animCell?.let { drawChessman(canvas, it, animX, animY) }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -167,11 +189,11 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
                     content[curRowIdx][curColIdx] = movingCell
                 }
                 movingCell = null
-                invalidate()
                 // 点击事件
                 if (abs(event.x - startX) < touchSlop && abs(event.y - startY) < touchSlop) {
                     performClick()
                 }
+                invalidate()
             }
         }
         return true
@@ -182,6 +204,7 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
      */
     private fun merge(targetCell: Chessman, movingCell: Chessman?) {
         targetCell.level += movingCell?.level ?: 0
+        // TODO: anim
     }
 
     /**
@@ -193,8 +216,16 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
             Toast.makeText(context, "棋盘已满", Toast.LENGTH_SHORT).show()
             return
         }
-        content[pos.first][pos.second] = content[row][col]
-        // TODO: anim
+        animCell = content[row][col]
+        createAnimator(col, row, pos).apply {
+            addListener(object : SimpleAnimListener() {
+                override fun onAnimationEnd(animation: Animator) {
+                    content[pos.first][pos.second] = animCell
+                    animCell = null
+                    invalidate()
+                }
+            })
+        }.start()
     }
 
     override fun performClick(): Boolean {
@@ -215,11 +246,29 @@ class Chessboard(context: Context, attrs: AttributeSet? = null) : View(context, 
             Toast.makeText(context, "棋盘已满", Toast.LENGTH_SHORT).show()
             return
         }
-        content[pos.first][pos.second] = Chessman(
+        animCell = Chessman(
             type = if (Random.nextDouble() < 0.1) ChessType.Emitter else ChessType.Normal,
             color = colors.random()
         )
-        // TODO: anim
+        createAnimator(col, row, pos).apply {
+            addListener(object : SimpleAnimListener() {
+                override fun onAnimationEnd(animation: Animator) {
+                    content[pos.first][pos.second] = animCell
+                    animCell = null
+                    invalidate()
+                }
+            })
+        }.start()
+    }
+
+    /**
+     * 棋子移动时的动画
+     */
+    private fun createAnimator(col: Int, row: Int, pos: Pair<Int, Int>): ObjectAnimator {
+        val holderX = PropertyValuesHolder.ofFloat("animX", calPos(col), calPos(pos.second))
+        val holderY = PropertyValuesHolder.ofFloat("animY", calPos(row), calPos(pos.first))
+        return ObjectAnimator.ofPropertyValuesHolder(this, holderX, holderY)
+            .apply { duration = 200 }
     }
 
     /**
